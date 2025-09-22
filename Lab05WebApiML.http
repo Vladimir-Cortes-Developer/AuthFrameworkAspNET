@@ -1,0 +1,6 @@
+@Lab05WebApiML_HostAddress = http://localhost:5095
+
+GET {{Lab05WebApiML_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
