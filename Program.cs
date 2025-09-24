@@ -16,7 +16,7 @@ using System.Text;
 
 
 // Configurar NLog para logging
-var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+var logger = NLog.LogManager.Setup().LoadConfigurationFromFile("nlog.config").GetCurrentClassLogger();
 logger.Debug("Iniciando aplicación");
 
 try
@@ -209,7 +209,7 @@ try
 
     // 11. MIDDLEWARE PIPELINE
     if (app.Environment.IsDevelopment())
-    {
+    { 
         app.UseSwagger();
         app.UseSwaggerUI(c =>
         {

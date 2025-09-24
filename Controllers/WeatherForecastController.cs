@@ -4,7 +4,7 @@ using Microsoft.Identity.Web.Resource;
 
 namespace Lab05WebApiML.Controllers
 {
-    [Authorize(Roles = "UsuarioFinal")]
+    [Authorize(Roles = "UsuarioFinal,Admin")]
     [ApiController]
     [Route("[controller]")]
     //[RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
