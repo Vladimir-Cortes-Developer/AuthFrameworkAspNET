@@ -114,8 +114,42 @@ namespace Lab05WebApiML.Datos
                 }
             );
 
-            // Nota: Los usuarios (incluyendo administradores) deben crearse a través de los endpoints
-            // de registro de la API para garantizar el hash correcto de contraseñas
+            // Seed del usuario administrador por defecto
+            var adminUserId = "4d5e6f7g-8h9i-0j1k-2l3m-n4o5p6q7r8s9";
+            var passwordHasher = new PasswordHasher<ApplicationUser>();
+
+            // Usuario administrador por defecto
+            var adminUser = new ApplicationUser
+            {
+                Id = adminUserId,
+                UserName = "admin@lab05.com",
+                NormalizedUserName = "ADMIN@LAB05.COM",
+                Email = "admin@lab05.com",
+                NormalizedEmail = "ADMIN@LAB05.COM",
+                EmailConfirmed = true,
+                PrimerNombre = "Administrador",
+                PrimerApellido = "Sistema",
+                TipoIdentificacion = "CC",
+                NumeroIdentificacion = "12345678",
+                IsActive = true,
+                CreatedAt = seedDate,
+                SecurityStamp = "admin-security-stamp-001",
+                ConcurrencyStamp = "admin-concurrency-stamp-001"
+            };
+
+            // Hashear la contraseña "Admin123*"
+            adminUser.PasswordHash = passwordHasher.HashPassword(adminUser, "Admin123*");
+
+            modelBuilder.Entity<ApplicationUser>().HasData(adminUser);
+
+            // Relación usuario-rol para el administrador
+            modelBuilder.Entity<ApplicationUserRole>().HasData(
+                new ApplicationUserRole
+                {
+                    UserId = adminUserId,
+                    RoleId = adminRoleId
+                }
+            );
         }
     }
 }
