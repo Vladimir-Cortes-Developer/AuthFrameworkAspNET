@@ -114,8 +114,8 @@ namespace Lab05WebApiML.Datos
                 }
             );
 
-            // Nota: El usuario administrador se creará dinámicamente en el Program.cs
-            // para evitar problemas con el hash de contraseña estático
+            // Nota: Los usuarios (incluyendo administradores) deben crearse a través de los endpoints
+            // de registro de la API para garantizar el hash correcto de contraseñas
         }
     }
 }

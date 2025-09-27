@@ -230,50 +230,6 @@ try
                 context.Database.Migrate();
                 logger.Info("Migraciones aplicadas exitosamente");
 
-                // Crear usuario administrador si no existe
-                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-
-                var adminEmail = "admin@lab05api.com";
-                var adminUser = await userManager.FindByEmailAsync(adminEmail);
-
-                if (adminUser == null)
-                {
-                    logger.Info("Creando usuario administrador...");
-                    adminUser = new ApplicationUser
-                    {
-                        UserName = adminEmail,
-                        Email = adminEmail,
-                        EmailConfirmed = true,
-                        TipoIdentificacion = "CC",
-                        NumeroIdentificacion = "1234567890",
-                        Names = "Admin",
-                        Surnames = "Sistema",
-                        FechaNacimiento = new DateOnly(1990, 1, 1),
-                        Sexo = "M",
-                        Ciudad = "Cucuta",
-                        Pais = "Colombia",
-                        PhoneNumber = "3000000000",
-                        Direccion = "Calle 123 # 45-67",
-                        Department = "IT",
-                        EmployeeCode = "ADM001",
-                        IsActive = true
-                    };
-
-                    var result = await userManager.CreateAsync(adminUser, "Admin@123456");
-                    if (result.Succeeded)
-                    {
-                        if (await roleManager.RoleExistsAsync("Admin"))
-                        {
-                            await userManager.AddToRoleAsync(adminUser, "Admin");
-                            logger.Info("Usuario administrador creado y rol asignado exitosamente");
-                        }
-                    }
-                    else
-                    {
-                        logger.Error($"Error creando usuario administrador: {string.Join(", ", result.Errors.Select(e => e.Description))}");
-                    }
-                }
             }
             catch (Exception ex)
             {
