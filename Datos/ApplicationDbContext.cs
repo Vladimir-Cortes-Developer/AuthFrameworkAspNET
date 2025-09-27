@@ -68,88 +68,9 @@ namespace Lab05WebApiML.Datos
 
         public static void SeedData(ModelBuilder modelBuilder)
         {
-            // ✅ CORREGIDO: Usar valores estáticos en lugar de dinámicos
-
-            // Seed de roles básicos - IDs fijos
-            var adminRoleId = "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6";
-            var empleadoRoleId = "2b3c4d5e-6f7g-8h9i-0j1k-l2m3n4o5p6q7";
-            var usuarioFinalRoleId = "3c4d5e6f-7g8h-9i0j-1k2l-m3n4o5p6q7r8";
-
-            // Fecha fija para datos de semilla
-            var seedDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
-            modelBuilder.Entity<ApplicationRole>().HasData(
-                new ApplicationRole
-                {
-                    Id = adminRoleId,
-                    Name = "Admin",
-                    NormalizedName = "ADMIN",
-                    Description = "Administrador del sistema con acceso total",
-                    Priority = 100,
-                    IsActive = true,
-                    CreatedAt = seedDate, // ✅ Valor fijo
-                    ConcurrencyStamp = "admin-role-stamp-001" // ✅ Valor fijo
-                },
-                new ApplicationRole
-                {
-                    Id = empleadoRoleId,
-                    Name = "Empleado",
-                    NormalizedName = "EMPLEADO",
-                    Description = "Empleado con permisos de lectura, escritura y edición",
-                    Priority = 50,
-                    IsActive = true,
-                    CreatedAt = seedDate, // ✅ Valor fijo
-                    ConcurrencyStamp = "empleado-role-stamp-002" // ✅ Valor fijo
-                },
-                new ApplicationRole
-                {
-                    Id = usuarioFinalRoleId,
-                    Name = "UsuarioFinal",
-                    NormalizedName = "USUARIOFINAL",
-                    Description = "Usuario final con permisos de solo lectura",
-                    Priority = 10,
-                    IsActive = true,
-                    CreatedAt = seedDate, // ✅ Valor fijo
-                    ConcurrencyStamp = "usuariofinal-role-stamp-003" // ✅ Valor fijo
-                }
-            );
-
-            // Seed del usuario administrador por defecto
-            var adminUserId = "4d5e6f7g-8h9i-0j1k-2l3m-n4o5p6q7r8s9";
-            var passwordHasher = new PasswordHasher<ApplicationUser>();
-
-            // Usuario administrador por defecto
-            var adminUser = new ApplicationUser
-            {
-                Id = adminUserId,
-                UserName = "admin@lab05.com",
-                NormalizedUserName = "ADMIN@LAB05.COM",
-                Email = "admin@lab05.com",
-                NormalizedEmail = "ADMIN@LAB05.COM",
-                EmailConfirmed = true,
-                 Names= "Administrador",
-                Surnames = "Sistema",
-                TipoIdentificacion = "CC",
-                NumeroIdentificacion = "12345678",
-                IsActive = true,
-                CreatedAt = seedDate,
-                SecurityStamp = "admin-security-stamp-001",
-                ConcurrencyStamp = "admin-concurrency-stamp-001"
-            };
-
-            // Hashear la contraseña "Admin123*"
-            adminUser.PasswordHash = passwordHasher.HashPassword(adminUser, "Admin123*");
-
-            modelBuilder.Entity<ApplicationUser>().HasData(adminUser);
-
-            // Relación usuario-rol para el administrador
-            modelBuilder.Entity<ApplicationUserRole>().HasData(
-                new ApplicationUserRole
-                {
-                    UserId = adminUserId,
-                    RoleId = adminRoleId
-                }
-            );
+            // NOTA: Los datos semilla (roles y usuario administrador) se crearán mediante
+            // código de inicialización en el Program.cs para evitar problemas de migraciones
+            // con valores dinámicos que Entity Framework considera no determinísticos
         }
     }
 }

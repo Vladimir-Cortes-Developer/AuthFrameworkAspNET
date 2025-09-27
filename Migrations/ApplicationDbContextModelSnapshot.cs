@@ -60,41 +60,6 @@ namespace Lab05WebApiML.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6",
-                            ConcurrencyStamp = "admin-role-stamp-001",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Administrador del sistema con acceso total",
-                            IsActive = true,
-                            Name = "Admin",
-                            NormalizedName = "ADMIN",
-                            Priority = 100
-                        },
-                        new
-                        {
-                            Id = "2b3c4d5e-6f7g-8h9i-0j1k-l2m3n4o5p6q7",
-                            ConcurrencyStamp = "empleado-role-stamp-002",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Empleado con permisos de lectura, escritura y edición",
-                            IsActive = true,
-                            Name = "Empleado",
-                            NormalizedName = "EMPLEADO",
-                            Priority = 50
-                        },
-                        new
-                        {
-                            Id = "3c4d5e6f-7g8h-9i0j-1k2l-m3n4o5p6q7r8",
-                            ConcurrencyStamp = "usuariofinal-role-stamp-003",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Usuario final con permisos de solo lectura",
-                            IsActive = true,
-                            Name = "UsuarioFinal",
-                            NormalizedName = "USUARIOFINAL",
-                            Priority = 10
-                        });
                 });
 
             modelBuilder.Entity("Lab05WebApiML.Models.ApplicationUser", b =>
