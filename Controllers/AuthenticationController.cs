@@ -468,7 +468,7 @@ namespace Lab05WebApiML.Controllers
                     Names = user.Names,
                     Surnames = user.Surnames,
                     FullName = user.FullName,
-                    PhoneNumber = user.PhoneNumber,
+                    PhoneNumber = user.PhoneNumber ?? string.Empty,
                     Pais = user.Pais,
                     Ciudad = user.Ciudad,
                     FechaNacimiento = user.FechaNacimiento,
