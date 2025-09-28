@@ -208,7 +208,7 @@ try
     var app = builder.Build();
 
     // 11. MIDDLEWARE PIPELINE
-    if (app.Environment.IsDevelopment())
+    if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     { 
         app.UseSwagger();
         app.UseSwaggerUI(c =>
@@ -219,7 +219,7 @@ try
     }
 
     // Aplicar migraciones automáticamente en desarrollo
-    if (app.Environment.IsDevelopment())
+    if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     {
         using (var scope = app.Services.CreateScope())
         {
