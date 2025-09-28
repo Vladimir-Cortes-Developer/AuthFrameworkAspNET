@@ -62,15 +62,87 @@ namespace Lab05WebApiML.Datos
                 entity.HasIndex(rt => rt.UserId);
             });
 
-            // IMPORTANTE: Llamar al método SeedData
-           SeedData(builder);
         }
 
-        public static void SeedData(ModelBuilder modelBuilder)
+
+        /// <summary>
+        /// Método para crear roles y usuario administrador por defecto si no existen
+        /// </summary>
+        public static async Task SeedAdminUserAsync(IServiceProvider serviceProvider)
         {
-            // NOTA: Los datos semilla (roles y usuario administrador) se crearán mediante
-            // código de inicialización en el Program.cs para evitar problemas de migraciones
-            // con valores dinámicos que Entity Framework considera no determinísticos
+            using var scope = serviceProvider.CreateScope();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+
+            // Crear roles si no existen
+            var roles = new[]
+            {
+                new ApplicationRole
+                {
+                    Name = "Admin",
+                    Description = "Administrador del sistema con acceso total",
+                    Priority = 100,
+                    IsActive = true
+                },
+                new ApplicationRole
+                {
+                    Name = "Empleado",
+                    Description = "Empleado con permisos de lectura, escritura y edición",
+                    Priority = 50,
+                    IsActive = true
+                },
+                new ApplicationRole
+                {
+                    Name = "UsuarioFinal",
+                    Description = "Usuario final con permisos de solo lectura",
+                    Priority = 10,
+                    IsActive = true
+                }
+            };
+
+            foreach (var role in roles)
+            {
+                if (!await roleManager.RoleExistsAsync(role.Name))
+                {
+                    await roleManager.CreateAsync(role);
+                }
+            }
+
+            // Crear usuario administrador si no existe
+            var adminEmail = "admin@lab05api.com";
+            var adminUser = await userManager.FindByEmailAsync(adminEmail);
+
+            if (adminUser == null)
+            {
+                adminUser = new ApplicationUser
+                {
+                    UserName = adminEmail,
+                    Email = adminEmail,
+                    EmailConfirmed = true,
+                    TipoIdentificacion = "CC",
+                    NumeroIdentificacion = "1234567890",
+                    Names = "Admin",
+                    Surnames = "Sistema",
+                    FechaNacimiento = new DateOnly(1990, 1, 1),
+                    Sexo = "M",
+                    Ciudad = "Cucuta",
+                    Pais = "Colombia",
+                    PhoneNumber = "3000000000",
+                    Direccion = "Calle 123 # 45-67",
+                    Department = "IT",
+                    EmployeeCode = "ADM001",
+                    IsActive = true
+                };
+
+                var result = await userManager.CreateAsync(adminUser, "Admin@123456");
+                if (result.Succeeded)
+                {
+                    if (await roleManager.RoleExistsAsync("Admin"))
+                    {
+                        await userManager.AddToRoleAsync(adminUser, "Admin");
+                    }
+                }
+            }
         }
     }
 }

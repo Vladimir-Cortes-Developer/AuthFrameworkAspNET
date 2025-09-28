@@ -226,9 +226,42 @@ try
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             try
             {
-                logger.Info("Aplicando migraciones de base de datos...");
-                context.Database.Migrate();
-                logger.Info("Migraciones aplicadas exitosamente");
+                logger.Info("Verificando estado de la base de datos...");
+
+                // Asegurar que la base de datos existe
+                if (context.Database.EnsureCreated())
+                {
+                    logger.Info("Base de datos creada exitosamente");
+                }
+                else
+                {
+                    logger.Info("Base de datos ya existe - verificando estructura");
+
+                    // Solo aplicar migraciones si realmente hay pendientes Y no existen conflictos
+                    try
+                    {
+                        var pendingMigrations = context.Database.GetPendingMigrations();
+                        if (pendingMigrations.Any())
+                        {
+                            logger.Info($"Aplicando {pendingMigrations.Count()} migraciones pendientes...");
+                            context.Database.Migrate();
+                            logger.Info("Migraciones aplicadas exitosamente");
+                        }
+                        else
+                        {
+                            logger.Info("Base de datos ya está actualizada");
+                        }
+                    }
+                    catch (Exception migrationEx)
+                    {
+                        logger.Warn($"Error al aplicar migraciones: {migrationEx.Message}. Continuando con la aplicación...");
+                    }
+                }
+
+                // Crear roles y usuario administrador después de las migraciones
+                logger.Info("Creando roles y usuario administrador si no existen...");
+                await ApplicationDbContext.SeedAdminUserAsync(app.Services);
+                logger.Info("Roles y usuario administrador verificados/creados exitosamente");
 
             }
             catch (Exception ex)
