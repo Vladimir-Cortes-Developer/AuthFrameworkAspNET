@@ -139,7 +139,7 @@ try
     {
         options.AddPolicy("CorsPolicy",
             corsBuilder => corsBuilder
-                .WithOrigins() // .WithOrigins("https://localhost:7117", "http://localhost:5095")
+                .WithOrigins("https://witty-plant-05e55b21e.1.azurestaticapps.net", "https://lemon-glacier-05a80d40f.1.azurestaticapps.net")
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials()
@@ -208,7 +208,7 @@ try
     var app = builder.Build();
 
     // 11. MIDDLEWARE PIPELINE
-    if (app.Environment.IsDevelopment())
+    if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     { 
         app.UseSwagger();
         app.UseSwaggerUI(c =>
@@ -219,7 +219,7 @@ try
     }
 
     // Aplicar migraciones automáticamente en desarrollo
-    if (app.Environment.IsDevelopment())
+    if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     {
         using (var scope = app.Services.CreateScope())
         {
